@@ -11,12 +11,29 @@ public class HomeController : Controller
     }
 
     [HttpPost]
-    public IActionResult Analizar(string opinion)
-    {
-        var resultado = _service.Predict(opinion);
-        ViewBag.Texto = opinion;
-        ViewBag.Resultado = resultado.Prediction ? "Positivo" : "Negativo";
-        ViewBag.Score = resultado.Probability;
-        return View("Resultado");
-    }
+   public IActionResult Analizar(string opinion, string userId)
+{
+    var resultado = _service.Predict(opinion);
+    ViewBag.Texto = opinion;
+    ViewBag.Resultado = resultado.Prediction ? "Positivo" : "Negativo";
+    ViewBag.Score = resultado.Probability;
+    ViewBag.UserId = userId;
+    return View("Resultado");
+}
+    [HttpGet]
+public IActionResult Recomendacion()
+{
+    return View();
+}
+
+[HttpPost]
+public IActionResult Recomendacion(string userId)
+{
+    var servicio = new RecommendationService();
+    var productos = servicio.GetRecommendations(userId);
+    ViewBag.UserId = userId;
+    ViewBag.Productos = productos;
+    return View();
+}
+
 }

@@ -9,16 +9,20 @@
         <p class="text-center">Escribe tu opinión sobre un producto para detectar su sentimiento:</p>
 
         <form method="post" asp-action="Analizar" class="mt-4">
-            <div class="form-group">
-                <textarea name="opinion" class="form-control" rows="4"
-                          placeholder="Ejemplo: Me encantó la calidad del producto." required></textarea>
-            </div>
-            <div class="text-center mt-3">
-                <button type="submit" class="btn btn-primary px-4"
-                        style="background-color: #0099e6; border: none; font-weight: bold;">
-                    Analizar Sentimiento
-                </button>
-            </div>
-        </form>
+    <div class="form-group">
+        <label for="userId" class="form-label">Tu código de usuario (Ej: U1):</label>
+        <input type="text" name="userId" class="form-control mb-3" required />
+    </div>
+    <div class="form-group">
+        <label for="opinion" class="form-label">Tu opinión:</label>
+        <textarea name="opinion" class="form-control" rows="4" placeholder="Ejemplo: Me encantó la calidad del producto." required></textarea>
+    </div>
+    <div class="text-center mt-3">
+        <button type="submit" class="btn btn-primary px-4" style="background-color: #0099e6; border: none; font-weight: bold;">
+            Analizar Sentimiento
+        </button>
+    </div>
+</form>
+
     </div>
 </div>

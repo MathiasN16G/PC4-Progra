@@ -47,6 +47,10 @@
             "Microsoft.ML": {
               "target": "Package",
               "version": "[4.0.2, )"
+            },
+            "Microsoft.ML.Recommender": {
+              "target": "Package",
+              "version": "[0.22.2, )"
             }
           },
           "imports": [
