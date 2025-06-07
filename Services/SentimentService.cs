@@ -1,4 +1,5 @@
 using Microsoft.ML;
+using Microsoft.ML.Data;
 using System.IO;
 
 public class SentimentService
@@ -10,19 +11,23 @@ public class SentimentService
     {
         var mlContext = new MLContext();
 
+        // Entrenar solo si no existe el modelo
         if (!File.Exists(_modelPath))
-{
-    var data = mlContext.Data.LoadFromTextFile<SentimentModelInput>(
-        "Data/sentiment-data.tsv", hasHeader: true, separatorChar: '\t');
+        {
+            var data = mlContext.Data.LoadFromTextFile<SentimentModelInput>(
+                path: "Data/sentiment-data.tsv",
+                hasHeader: true,
+                separatorChar: '\t');
 
-    var pipeline = mlContext.Transforms.Text.FeaturizeText("Features", nameof(SentimentModelInput.Text))
-        .Append(mlContext.BinaryClassification.Trainers.SdcaLogisticRegression());
+            var pipeline = mlContext.Transforms.Text.FeaturizeText("Features", nameof(SentimentModelInput.Text))
+                .Append(mlContext.BinaryClassification.Trainers.SdcaLogisticRegression());
 
-    var model = pipeline.Fit(data);
-    mlContext.Model.Save(model, data.Schema, _modelPath);
-}
+            var model = pipeline.Fit(data);
 
+            mlContext.Model.Save(model, data.Schema, _modelPath);
+        }
 
+        // Cargar modelo entrenado
         var loadedModel = mlContext.Model.Load(_modelPath, out _);
         _predEngine = mlContext.Model.CreatePredictionEngine<SentimentModelInput, SentimentModelOutput>(loadedModel);
     }
