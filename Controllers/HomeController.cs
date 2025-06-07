@@ -1,31 +1,22 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using EvaluadorInteligente.Models;
-
-namespace EvaluadorInteligente.Controllers;
+using Microsoft.Extensions.Logging;
 
 public class HomeController : Controller
 {
-    private readonly ILogger<HomeController> _logger;
-
-    public HomeController(ILogger<HomeController> logger)
-    {
-        _logger = logger;
-    }
+    private readonly SentimentService _service = new();
 
     public IActionResult Index()
     {
         return View();
     }
 
-    public IActionResult Privacy()
+    [HttpPost]
+    public IActionResult Analizar(string opinion)
     {
-        return View();
-    }
-
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        var resultado = _service.Predict(opinion);
+        ViewBag.Texto = opinion;
+        ViewBag.Resultado = resultado.Prediction ? "Positivo" : "Negativo";
+        ViewBag.Score = resultado.Probability;
+        return View("Resultado");
     }
 }

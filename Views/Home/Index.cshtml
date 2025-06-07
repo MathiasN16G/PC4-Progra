@@ -1,8 +1,11 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Análisis de Opiniones";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<h2>@ViewData["Title"]</h2>
+
+<form method="post" asp-action="Analizar">
+    <label for="opinion">Escribe tu opinión sobre un producto:</label><br />
+    <textarea name="opinion" rows="4" cols="60" required></textarea><br /><br />
+    <button type="submit">Analizar Sentimiento</button>
+</form>

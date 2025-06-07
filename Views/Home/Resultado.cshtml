@@ -1,0 +1,11 @@
+@{
+    ViewData["Title"] = "Resultado del Análisis";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<p><strong>Opinión ingresada:</strong> @ViewBag.Texto</p>
+<p><strong>Sentimiento detectado:</strong> @ViewBag.Resultado</p>
+<p><strong>Score de Confianza:</strong> @ViewBag.Score</p>
+
+<a asp-action="Index">Volver</a>
