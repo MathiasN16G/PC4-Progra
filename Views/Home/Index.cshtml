@@ -1,11 +1,24 @@
 ﻿@{
-    ViewData["Title"] = "Análisis de Opiniones";
+    ViewData["Title"] = "Inicio";
 }
 
-<h2>@ViewData["Title"]</h2>
+<div class="container mt-5">
+    <div class="card shadow p-4 border-0" style="background-color: #d9f1ff; border-radius: 15px;">
+        <h1 class="text-center mb-3" style="color: #007acc;">Evaluador Inteligente</h1>
+        <p class="lead text-center text-dark">Hola, ten un lindo dia </p>
+        <p class="text-center">Escribe tu opinión sobre un producto para detectar su sentimiento:</p>
 
-<form method="post" asp-action="Analizar">
-    <label for="opinion">Escribe tu opinión sobre un producto:</label><br />
-    <textarea name="opinion" rows="4" cols="60" required></textarea><br /><br />
-    <button type="submit">Analizar Sentimiento</button>
-</form>
+        <form method="post" asp-action="Analizar" class="mt-4">
+            <div class="form-group">
+                <textarea name="opinion" class="form-control" rows="4"
+                          placeholder="Ejemplo: Me encantó la calidad del producto." required></textarea>
+            </div>
+            <div class="text-center mt-3">
+                <button type="submit" class="btn btn-primary px-4"
+                        style="background-color: #0099e6; border: none; font-weight: bold;">
+                    Analizar Sentimiento
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
