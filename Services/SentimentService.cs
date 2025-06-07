@@ -1,4 +1,5 @@
 using Microsoft.ML;
+using Microsoft.ML.Data;
 using System.IO;
 
 public class SentimentService
@@ -10,10 +11,13 @@ public class SentimentService
     {
         var mlContext = new MLContext();
 
+      
         if (!File.Exists(_modelPath))
         {
             var data = mlContext.Data.LoadFromTextFile<SentimentModelInput>(
-                "Data/sentiment-data.tsv", hasHeader: true);
+                path: "Data/sentiment-data.tsv",
+                hasHeader: true,
+                separatorChar: '\t'); 
 
             var pipeline = mlContext.Transforms.Text.FeaturizeText("Features", nameof(SentimentModelInput.Text))
                 .Append(mlContext.BinaryClassification.Trainers.SdcaLogisticRegression());

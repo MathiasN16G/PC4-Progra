@@ -18,7 +18,8 @@ public IActionResult Analizar(string opinion, string userId)
     ViewBag.Texto = opinion;
 
    
-    ViewBag.Resultado = resultado.Prediction ? "Negativo" : "Positivo";
+    ViewBag.Resultado = resultado.Score >= 0.5 ? "Positivo" : "Negativo";
+
     
     ViewBag.Score = resultado.Probability;
     ViewBag.UserId = userId;

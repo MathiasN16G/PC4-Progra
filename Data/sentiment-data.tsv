@@ -1,22 +1,25 @@
 Label	Text
-false	Me gustó
-false	Está bueno
-false	Muy bueno
-false	Me encantó
-false	Excelente
-false	Súper recomendado
-false	Todo bien
-false	Buena calidad
-false	Funciona bien
-false	Perfecto
+true	Me gustó
+true	Está bueno
+true	Muy bueno
+true	Me encantó
+true	Excelente
+true	Súper recomendado
+true	Todo bien
+true	Buena calidad
+true	Funciona bien
+true	Perfecto
 
-true	No me gustó
-true	Malo
-true	Muy malo
-true	No funciona
-true	Defectuoso
-true	Tardó mucho
-true	Está roto
-true	No sirve
-true	Mala calidad
-true	No lo recomiendo
+false	No me gustó
+false	Está feo
+false	Muy malo
+false	No funciona
+false	Está mal hecho
+false	Tardó demasiado
+false	Está roto
+false	No sirve
+false	Mala calidad
+false	No lo recomiendo
+false	No me convence
+false	Me parece malo
+false	Es pésimo
