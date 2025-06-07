@@ -12,7 +12,15 @@ public class RecommendationService
     public RecommendationService()
     {
         _mlContext = new MLContext();
-        TrainModel();
+
+        // Verifica si el modelo existe, si no, lo entrena
+        if (!File.Exists(_modelPath))
+        {
+            TrainModel();
+        }
+
+        using var stream = new FileStream(_modelPath, FileMode.Open, FileAccess.Read, FileShare.Read);
+        _model = _mlContext.Model.Load(stream, out _);
     }
 
     private void TrainModel()
@@ -20,41 +28,50 @@ public class RecommendationService
         var data = _mlContext.Data.LoadFromTextFile<RatingData>(
             "Data/ratings-data.csv", hasHeader: true, separatorChar: ',');
 
-        var dataView = _mlContext.Transforms.Conversion
+        var pipeline = _mlContext.Transforms.Conversion
             .MapValueToKey("UserId")
             .Append(_mlContext.Transforms.Conversion.MapValueToKey("ProductId"))
-            .Fit(data)
-            .Transform(data);
+            .Append(_mlContext.Recommendation().Trainers.MatrixFactorization(new MatrixFactorizationTrainer.Options
+            {
+                MatrixColumnIndexColumnName = "UserId",
+                MatrixRowIndexColumnName = "ProductId",
+                LabelColumnName = "Label",
+                NumberOfIterations = 20,
+                ApproximationRank = 100
+            }));
 
-        var options = new MatrixFactorizationTrainer.Options
-        {
-            MatrixColumnIndexColumnName = "UserId",
-            MatrixRowIndexColumnName = "ProductId",
-            LabelColumnName = "Label",
-            NumberOfIterations = 20,
-            ApproximationRank = 100
-        };
-
-        var estimator = _mlContext.Recommendation().Trainers.MatrixFactorization(options);
-        _model = estimator.Fit(dataView);
+        var model = pipeline.Fit(data);
+        _mlContext.Model.Save(model, data.Schema, _modelPath);
     }
 
     public List<string> GetRecommendations(string userId)
+{
+    var products = new[] { "P1", "P2", "P3", "P4", "P5" };
+    var predictionResults = new List<(string productId, float score)>();
+
+    var inputData = products.Select(p => new RatingData
     {
-        var products = new[] { "P1", "P2", "P3", "P4", "P5" };
-        var predictions = new List<(string productId, float score)>();
+        UserId = userId,
+        ProductId = p
+    });
 
-        foreach (var productId in products)
-        {
-            var predictionEngine = _mlContext.Model.CreatePredictionEngine<RatingData, ProductRatingPrediction>(_model);
-            var prediction = predictionEngine.Predict(new RatingData { UserId = userId, ProductId = productId });
-            predictions.Add((productId, prediction.Score));
-        }
+    var inputView = _mlContext.Data.LoadFromEnumerable(inputData);
+    var transformedData = _model.Transform(inputView);
+    var scoredData = _mlContext.Data.CreateEnumerable<ProductRatingPrediction>(transformedData, reuseRowObject: false).ToList();
 
-        return predictions
-            .OrderByDescending(p => p.score)
-            .Take(5)
-            .Select(p => p.productId)
-            .ToList();
+    for (int i = 0; i < products.Length; i++)
+    {
+        predictionResults.Add((products[i], scoredData[i].Score));
     }
+
+    return predictionResults
+        .OrderByDescending(p => p.score)
+        .Take(5)
+        .Select(p => p.productId)
+        .ToList();
+}
+
+
+
+
 }
