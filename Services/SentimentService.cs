@@ -11,16 +11,17 @@ public class SentimentService
         var mlContext = new MLContext();
 
         if (!File.Exists(_modelPath))
-        {
-            var data = mlContext.Data.LoadFromTextFile<SentimentModelInput>(
-                "Data/sentiment-data.tsv", hasHeader: true);
+{
+    var data = mlContext.Data.LoadFromTextFile<SentimentModelInput>(
+        "Data/sentiment-data.tsv", hasHeader: true, separatorChar: '\t');
 
-            var pipeline = mlContext.Transforms.Text.FeaturizeText("Features", nameof(SentimentModelInput.Text))
-                .Append(mlContext.BinaryClassification.Trainers.SdcaLogisticRegression());
+    var pipeline = mlContext.Transforms.Text.FeaturizeText("Features", nameof(SentimentModelInput.Text))
+        .Append(mlContext.BinaryClassification.Trainers.SdcaLogisticRegression());
 
-            var model = pipeline.Fit(data);
-            mlContext.Model.Save(model, data.Schema, _modelPath);
-        }
+    var model = pipeline.Fit(data);
+    mlContext.Model.Save(model, data.Schema, _modelPath);
+}
+
 
         var loadedModel = mlContext.Model.Load(_modelPath, out _);
         _predEngine = mlContext.Model.CreatePredictionEngine<SentimentModelInput, SentimentModelOutput>(loadedModel);
