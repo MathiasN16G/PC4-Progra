@@ -11,7 +11,6 @@ public class SentimentService
     {
         var mlContext = new MLContext();
 
-        // Entrenar solo si no existe el modelo
         if (!File.Exists(_modelPath))
         {
             var data = mlContext.Data.LoadFromTextFile<SentimentModelInput>(
@@ -23,11 +22,9 @@ public class SentimentService
                 .Append(mlContext.BinaryClassification.Trainers.SdcaLogisticRegression());
 
             var model = pipeline.Fit(data);
-
             mlContext.Model.Save(model, data.Schema, _modelPath);
         }
 
-        // Cargar modelo entrenado
         var loadedModel = mlContext.Model.Load(_modelPath, out _);
         _predEngine = mlContext.Model.CreatePredictionEngine<SentimentModelInput, SentimentModelOutput>(loadedModel);
     }
