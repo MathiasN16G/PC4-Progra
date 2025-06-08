@@ -46,30 +46,34 @@ public class RecommendationService
 
     public List<string> GetRecommendations(string userId)
 {
-    var products = new[] { "P1", "P2", "P3", "P4", "P5" };
-    var predictionResults = new List<(string productId, float score)>();
+    try
+    {
+        var predictionEngine = _mlContext.Model.CreatePredictionEngine<RatingData, ProductRatingPrediction>(_model);
 
-    var inputData = products.Select(p => new RatingData
+        var productos = new List<string>();
+
+        for (int i = 1; i <= 5; i++)
+{
+    var productId = $"P{i}";
+    var prediction = predictionEngine.Predict(new RatingData
     {
         UserId = userId,
-        ProductId = p
+        ProductId = productId
     });
 
-    var inputView = _mlContext.Data.LoadFromEnumerable(inputData);
-    var transformedData = _model.Transform(inputView);
-    var scoredData = _mlContext.Data.CreateEnumerable<ProductRatingPrediction>(transformedData, reuseRowObject: false).ToList();
-
-    for (int i = 0; i < products.Length; i++)
-    {
-        predictionResults.Add((products[i], scoredData[i].Score));
-    }
-
-    return predictionResults
-        .OrderByDescending(p => p.score)
-        .Take(5)
-        .Select(p => p.productId)
-        .ToList();
+    productos.Add($"{productId} (Score: {prediction.Score:F2})");
 }
+    
+
+        return productos;
+    }
+    catch (Exception ex)
+    {
+        // log interno, o en tu vista puedes capturar esto
+        return new List<string> { "Error al obtener recomendaciones", ex.Message };
+    }
+}
+
 
 
 

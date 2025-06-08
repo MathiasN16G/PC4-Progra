@@ -12,9 +12,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Data\sentiment-data.tsv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+  <None Update="Data/ratings-data.csv">
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  </None>
+</ItemGroup>
 
 </Project>
