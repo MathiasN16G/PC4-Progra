@@ -35,13 +35,14 @@ public IActionResult Analizar(string opinion, string userId)
     }
 
     [HttpPost]
-    public IActionResult RecomendacionPost(string userId)
-    {
-        var servicio = new RecommendationService();
-        var productos = servicio.GetRecommendations(userId);
-        ViewBag.UserId = userId;
-        ViewBag.Productos = productos;
-        return View("Recomendacion"); 
+    [HttpPost]
+public IActionResult RecomendacionPost(string userId)
+{
+    var servicio = new RecommendationService();
+    var productos = servicio.GetRecommendations(userId);
+    ViewBag.UserId = userId;
+    ViewBag.Productos = productos;
+    return View("Recomendacion");
+}
 
-    }
 }
