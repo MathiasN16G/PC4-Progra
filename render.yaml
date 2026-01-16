@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: evaluador-inteligente
+    runtime: dotnet
+    repo: https://github.com/MathiasN16G/PC4-Progra
+    branch: feature/ml-recommendation
+    buildCommand: dotnet publish -c Release -o ./publish
+    startCommand: dotnet EvaluadorInteligente.dll
+    publishPath: ./publish

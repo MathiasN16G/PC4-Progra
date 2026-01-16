@@ -1,31 +1,48 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using EvaluadorInteligente.Models;
-
-namespace EvaluadorInteligente.Controllers;
+using Microsoft.Extensions.Logging;
 
 public class HomeController : Controller
 {
-    private readonly ILogger<HomeController> _logger;
-
-    public HomeController(ILogger<HomeController> logger)
-    {
-        _logger = logger;
-    }
+    private readonly SentimentService _service = new();
 
     public IActionResult Index()
     {
         return View();
     }
 
-    public IActionResult Privacy()
+    [HttpPost]
+    [HttpPost]
+public IActionResult Analizar(string opinion, string userId)
+{
+    var resultado = _service.Predict(opinion);
+    ViewBag.Texto = opinion;
+
+   
+    ViewBag.Resultado = resultado.Score >= 0.5 ? "Positivo" : "Negativo";
+
+    
+    ViewBag.Score = resultado.Probability;
+    ViewBag.UserId = userId;
+    return View("Resultado");
+}
+
+
+    [HttpGet]
+    public IActionResult Recomendacion(string userId) 
     {
+        ViewBag.UserId = userId; 
         return View();
     }
 
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-    }
+    [HttpPost]
+    [HttpPost]
+public IActionResult RecomendacionPost(string userId)
+{
+    var servicio = new RecommendationService();
+    var productos = servicio.GetRecommendations(userId);
+    ViewBag.UserId = userId;
+    ViewBag.Productos = productos;
+    return View("Recomendacion");
+}
+
 }

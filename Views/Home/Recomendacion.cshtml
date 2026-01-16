@@ -1,0 +1,34 @@
+@{
+    ViewData["Title"] = "Recomendación de Productos";
+}
+
+<div class="container mt-5">
+    <div class="card shadow p-4 border-0" style="background-color: #e3f7ff; border-radius: 15px;">
+        <h2 class="text-center mb-3 text-primary">Recomendación de Productos</h2>
+        <p class="text-center">Ingresa tu código de usuario para recibir recomendaciones:</p>
+        <p class="text-center text-secondary">
+            Usuarios disponibles: <strong>U1, U2, U3, U4, U5</strong>
+        </p>
+
+        <form method="post" asp-action="RecomendacionPost">
+            <div class="form-group text-center">
+                <input type="text" name="userId" class="form-control text-center" placeholder="Ej: U1" required />
+            </div>
+            <div class="text-center mt-3">
+                <button type="submit" class="btn btn-primary">Obtener Recomendaciones</button>
+            </div>
+        </form>
+
+        @if (ViewBag.Productos != null)
+        {
+            <hr />
+            <h5 class="text-center text-success">Recomendaciones para <strong>@ViewBag.UserId</strong>:</h5>
+            <ul class="list-group list-group-flush mt-3">
+                @foreach (var producto in ViewBag.Productos)
+                {
+                    <li class="list-group-item">@producto</li>
+                }
+            </ul>
+        }
+    </div>
+</div>
