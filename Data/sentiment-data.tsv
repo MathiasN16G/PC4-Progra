@@ -1,0 +1,22 @@
+Label	Text
+false	Me gustó
+false	Está bueno
+false	Muy bueno
+false	Me encantó
+false	Excelente
+false	Súper recomendado
+false	Todo bien
+false	Buena calidad
+false	Funciona bien
+false	Perfecto
+
+true	No me gustó
+true	Malo
+true	Muy malo
+true	No funciona
+true	Defectuoso
+true	Tardó mucho
+true	Está roto
+true	No sirve
+true	Mala calidad
+true	No lo recomiendo

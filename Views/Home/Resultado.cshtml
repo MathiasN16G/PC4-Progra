@@ -1,0 +1,29 @@
+@{
+    ViewData["Title"] = "Resultado";
+}
+
+<div class="container mt-5">
+    <div class="card p-4 shadow-lg border-0" style="background-color: #e0f7ff; border-radius: 15px;">
+        <h2 class="text-center mb-4" style="color: #005b96;">Resultado del Análisis</h2>
+
+        <p><strong>Opinión ingresada:</strong></p>
+        <div class="alert alert-info" style="background-color: #cceeff;">@ViewBag.Texto</div>
+
+        <p><strong>Sentimiento detectado:</strong> 
+            <span class="badge fs-5 @((ViewBag.Resultado == "Positivo") ? "bg-success" : "bg-danger")">
+                @ViewBag.Resultado
+            </span>
+        </p>
+
+        <p><strong>Score de Confianza:</strong> 
+            <span class="text-primary fw-bold">@ViewBag.Score</span>
+        </p>
+
+        <div class="text-center mt-4">
+            <a asp-action="Index" class="btn btn-outline-primary"
+               style="border-color: #007acc; color: #007acc;">
+                Analizar otra opinión
+            </a>
+        </div>
+    </div>
+</div>
